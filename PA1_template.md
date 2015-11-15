@@ -191,7 +191,8 @@ stepsByDate_missing
 ```r
 # Distribution of missing values in original dataset by weekday
 day <- weekdays(df$date)
-day <- factor(day, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+day <- factor(day, 
+              levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
 df_missingByDay <- tapply(df$steps, day, f <- function(x){sum(is.na(x))})
 df_missingByDay
 ```
@@ -215,7 +216,8 @@ The new dataset is created based on the above strategy, containing all of the or
 ```r
 # Create new dataset containing original and imputed values
 df$day <- weekdays(df$date)
-df$day <- factor(day, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+df$day <- factor(day, 
+                 levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
 avgStepsByDayInt <- tapply(df$steps, list(df$day, df$interval), mean, na.rm = TRUE)
 avgStepsByDayInt <- melt(avgStepsByDayInt, varnames = c("day", "interval"), 
                          value.name = "meanSteps")
@@ -255,8 +257,8 @@ mean2 <- round(mean(imputeStepsByDate$steps, na.rm = TRUE), 2)
 median2 <- median(imputeStepsByDate$steps, na.rm = TRUE)
 ```
 
-The mean total number of steps per day is 10821.21.   
-The median total number of steps per day is 11015.   
+The mean total number of steps per day (including imputed values) is 10821.21.   
+The median total number of steps per day (including imputed values) is 11015.   
 
 The use of imputed values has a noticeable impact the averages calculated, increasing both mean and median compared to earlier calculations. The median is now greater than the mean and the difference between the two averages has increased as well.
 
@@ -266,7 +268,7 @@ The use of imputed values has a noticeable impact the averages calculated, incre
 
 ### Part 1  
 
-The imputed values dataset is modified to include a variable for the part of the week (weekend or weekday) into the observations fall.
+The imputed values dataset is modified to include a variable for the kind of day (weekend or weekday) on which the observations fall.
 
 
 ```r
@@ -295,11 +297,11 @@ imputeAvgStepsByInt <- melt(imputeAvgStepsByInt,
 p4 <- ggplot(imputeAvgStepsByInt, aes(x = interval, y = steps)) + 
   geom_line() + 
   facet_wrap(~dayType, nrow = 2) + 
-  labs(title = "Average Daily Activity Patterns : a comparison (including imputed values)")
+  labs(title = "Average Daily Activity Patterns (including imputed values): a comparison")
 p4
 ```
 
 ![plot of chunk plot4](figure/plot4-1.png) 
 
 
-There some noticeable differences between weekend and weekday activity patterns.
+There are some noticeable differences between weekend and weekday activity patterns.
